@@ -16,7 +16,8 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Use(middleware.Logger)
 	mux.Use(middleware.Recoverer)
-	mux.Use(CsrfToken)
+	mux.Use(CsrfTokenMiddleware)
+	mux.Use(SessionMiddleware)
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)

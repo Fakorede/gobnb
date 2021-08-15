@@ -8,6 +8,13 @@
         <p>Some Text</p>
 
         <p>This is some dynamic data from the handler: {{index .StringMap "test"}}</p>
+        <p>
+          {{if ne (index .StringMap "remote_ip") ""}}
+            Your Remote IP address is {{index .StringMap "remote_ip"}}
+          {{else}}
+            I don't know your IP address yet. Visit the <a href="/">Home Page</a>
+          {{end}}
+        </p>
       </div>
     </div>
   </div>
