@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/fakorede/gobnb/pkg/config"
-	"github.com/fakorede/gobnb/pkg/handlers"
-	"github.com/fakorede/gobnb/pkg/render"
+	"github.com/fakorede/gobnb/internal/config"
+	"github.com/fakorede/gobnb/internal/handlers"
+	"github.com/fakorede/gobnb/internal/render"
 )
 
 const portNumber = ":8080"

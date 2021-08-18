@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/fakorede/gobnb/pkg/config"
-	"github.com/fakorede/gobnb/pkg/models"
-	"github.com/fakorede/gobnb/pkg/render"
+	"github.com/fakorede/gobnb/internal/config"
+	"github.com/fakorede/gobnb/internal/models"
+	"github.com/fakorede/gobnb/internal/render"
 )
 
 // Repo is the repository used by the handlers
@@ -57,6 +59,10 @@ func (rh *Repository) Majors(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "majors.page.tmpl", &models.TemplateData{})
 }
 
+func (rh *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "contact.page.tmpl", &models.TemplateData{})
+}
+
 func (rh *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
@@ -68,6 +74,28 @@ func (rh *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) 
 	w.Write([]byte(fmt.Sprintf("Start date is %s and End date is %s", start, end)))
 }
 
-func (rh *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "contact.page.tmpl", &models.TemplateData{})
+// jsonResponse
+type jsonResponse struct {
+	OK bool	`json:"ok"`
+	Message string	`json:"message"`
+}
+
+// CheckAvailabilityJSON handles request for availability and sends JSON response
+func (rh *Repository) CheckAvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+
+	// start := r.Form.Get("start")
+	// end := r.Form.Get("end")
+
+	resp := jsonResponse{
+		OK: true,
+		Message: "Available",
+	}
+
+	out, err := json.MarshalIndent(resp, "", "	")
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
