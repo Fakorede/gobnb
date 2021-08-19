@@ -1,5 +1,9 @@
 package models
 
+import (
+	"github.com/fakorede/gobnb/internal/forms"
+)
+
 // TemplateData holds possible data sent to templates from handlers
 type TemplateData struct {
 	StringMap map[string]string
@@ -10,4 +14,5 @@ type TemplateData struct {
 	Flash     string
 	Warning   string
 	Error     string
+	Form *forms.Form
 }
