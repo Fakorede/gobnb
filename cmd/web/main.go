@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/fakorede/gobnb/internal/config"
 	"github.com/fakorede/gobnb/internal/handlers"
+	"github.com/fakorede/gobnb/internal/models"
 	"github.com/fakorede/gobnb/internal/render"
 )
 
@@ -18,6 +20,8 @@ var session *scs.SessionManager
 var app config.AppConfig
 
 func main() {
+	// values to be stored in session
+	gob.Register(models.Reservation{})
 
 	app.InProduction = false
 
