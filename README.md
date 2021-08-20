@@ -20,33 +20,25 @@ Visitors to the site will be able to search for accommodations by date and make 
 git clone https://github.com/Fakorede/gobnb.git
 ```
 
-Run Tests
+### Run Tests
 
-- package main
+> To run tests, `cd` from the project root to the directory of each package and run the commands:
+
+
+|  Package |  Directory |
+|---|---|
+|  main |  /cmd/web |
+|  handlers | /internal/handlers  |
+|  render |  /internal/render |
+|  forms |  /internal/forms |
 
 ```
-cd cmd/web
 go test -v
+go test -cover
 go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 ```
 
-- package handlers
-
-```
-cd internal/handlers
-go test -v
-go test -coverprofile=coverage.out && go tool cover -html=coverage.out
-```
-
-- package render
-
-```
-cd internal/render
-go test -v
-go test -coverprofile=coverage.out && go tool cover -html=coverage.out
-```
-
-Run Application
+### Run Application
 
 ```
 cd gobnb
