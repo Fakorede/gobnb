@@ -43,7 +43,17 @@ go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 ```
 cd gobnb
 go mod download
+
 go run cmd/web/main.go cmd/web/middlewares.go cmd/web/routes.go
+
+alternatively,
+
+// On Mac
+chmod +x run.sh
+./run.sh
+
+// On Windows
+run.bat
 ```
 
 ### Tech Used
