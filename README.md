@@ -22,7 +22,7 @@ git clone https://github.com/Fakorede/gobnb.git
 
 ### Run Tests
 
-> To run tests, `cd` from the project root to the directory of each package and run the commands:
+> To run tests on a package level, `cd` from the project root to the directory of each package and run the commands:
 
 
 |  Package |  Directory |
@@ -36,6 +36,12 @@ git clone https://github.com/Fakorede/gobnb.git
 go test -v
 go test -cover
 go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+```
+
+> To run all tests from the project root
+
+```
+go test -v ./...
 ```
 
 ### Run Application

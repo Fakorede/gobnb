@@ -3,9 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
+	"github.com/fakorede/gobnb/internal/helpers"
 	"github.com/fakorede/gobnb/internal/models"
 	"github.com/fakorede/gobnb/internal/render"
 )
@@ -40,7 +40,8 @@ func (rh *Repository) CheckAvailabilityJSON(w http.ResponseWriter, r *http.Reque
 
 	out, err := json.MarshalIndent(resp, "", "	")
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")

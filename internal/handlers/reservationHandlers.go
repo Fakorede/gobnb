@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/fakorede/gobnb/internal/forms"
+	"github.com/fakorede/gobnb/internal/helpers"
 	"github.com/fakorede/gobnb/internal/models"
 	"github.com/fakorede/gobnb/internal/render"
 )
@@ -25,7 +25,7 @@ func (rh *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 func (rh *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
@@ -61,8 +61,8 @@ func (rh *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 func (rh *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := rh.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
+		rh.App.ErrorLog.Println("Cannot get item from session")
 		rh.App.Session.Put(r.Context(), "error", "Cannot get reservation from session")
-		log.Println("Cannot get item from session")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}

@@ -2,6 +2,7 @@ package render
 
 import (
 	"encoding/gob"
+	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -20,6 +21,13 @@ func TestMain(m *testing.M) {
 	gob.Register(models.Reservation{})
 
 	testApp.InProduction = false
+
+	// configure logging
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	testApp.InfoLog = infoLog
+
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	testApp.ErrorLog = errorLog
 
 	// Initialize a new session manager and configure the session lifetime.
 	session = scs.New()
