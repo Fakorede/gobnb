@@ -20,19 +20,45 @@ Visitors to the site will be able to search for accommodations by date and make 
 git clone https://github.com/Fakorede/gobnb.git
 ```
 
+Run Tests
+
+- package main
+
+```
+cd cmd/web
+go test -v
+go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+```
+
+- package handlers
+
+```
+cd internal/handlers
+go test -v
+go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+```
+
+- package render
+
+```
+cd internal/render
+go test -v
+go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+```
+
 Run Application
 
 ```
 cd gobnb
 go mod download
-go run cmd/web/*.go
+go run cmd/web/main.go cmd/web/middlewares.go cmd/web/routes.go
 ```
 
 ### Tech Used
 
 - Bootstrap
 - JavaScript
-- Golang
+- Golang (using the in-built net/http package for handling requests, chi for routing, and html/template for serving the pages)
 - SQL
 
 ### To be Deployed On

@@ -1,0 +1,10 @@
+mode: set
+github.com/fakorede/gobnb/cmd/web/main.go:22.13,24.16 2 0
+github.com/fakorede/gobnb/cmd/web/main.go:28.2,37.16 4 0
+github.com/fakorede/gobnb/cmd/web/main.go:24.16,26.3 1 0
+github.com/fakorede/gobnb/cmd/web/main.go:40.18,56.16 10 1
+github.com/fakorede/gobnb/cmd/web/main.go:61.2,70.12 6 1
+github.com/fakorede/gobnb/cmd/web/main.go:56.16,59.3 2 0
+github.com/fakorede/gobnb/cmd/web/middlewares.go:10.58,21.2 3 1
+github.com/fakorede/gobnb/cmd/web/middlewares.go:24.56,26.2 1 1
+github.com/fakorede/gobnb/cmd/web/routes.go:13.49,40.2 19 1
