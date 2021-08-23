@@ -1,4 +1,4 @@
-# GoBnB
+# GoBnB (wip)
 
 > A fully featured bookings and reservation system for a Bed & Breakfast.
 
@@ -103,7 +103,7 @@ $ run.bat
 - Golang (using the in-built net/http package for handling requests, chi for routing, html/template for serving the pages, soda for database migrations)
 - SQL
 
-### To be Deployed On
+### Deployed On
 
 - VPS: Linode
 - OS: Ubuntu 20.04
