@@ -9,7 +9,7 @@ import (
 
 func TestAddDefaultData(t *testing.T) {
 	var td models.TemplateData
-	
+
 	r, err := getSession()
 	if err != nil {
 		t.Error(err)

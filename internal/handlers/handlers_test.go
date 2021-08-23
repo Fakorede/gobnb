@@ -18,7 +18,7 @@ var theTests = []struct {
 	method             string
 	params             []postData
 	expectedStatusCode int
-} {
+}{
 	{"home", "/", "GET", []postData{}, http.StatusOK},
 	{"about", "/about", "GET", []postData{}, http.StatusOK},
 	{"contact", "/contact", "GET", []postData{}, http.StatusOK},
@@ -65,7 +65,7 @@ func TestHandlers(t *testing.T) {
 				values.Add(p.key, p.value)
 			}
 
-			resp, err := ts.Client().PostForm(ts.URL + v.url, values)
+			resp, err := ts.Client().PostForm(ts.URL+v.url, values)
 			if err != nil {
 				t.Log(err)
 				t.Fail()

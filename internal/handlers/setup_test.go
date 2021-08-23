@@ -32,12 +32,12 @@ func getRoutes() http.Handler {
 
 	app.InProduction = false
 
-		// configure logging
-		infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
-		app.InfoLog = infoLog
-	
-		errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-		app.ErrorLog = errorLog
+	// configure logging
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
 
 	// Initialize a new session manager and configure the session lifetime.
 	session = scs.New()
@@ -59,7 +59,7 @@ func getRoutes() http.Handler {
 	repo := NewRepo(&app)
 
 	NewHandlers(repo)
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 
 	mux := chi.NewRouter()
 

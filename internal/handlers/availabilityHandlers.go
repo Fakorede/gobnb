@@ -11,7 +11,7 @@ import (
 )
 
 func (rh *Repository) Availability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
 
 func (rh *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
