@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/fakorede/gobnb/internal/forms"
 	"github.com/fakorede/gobnb/internal/helpers"
@@ -29,11 +31,38 @@ func (rh *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	start_date := r.Form.Get("start_date")
+	end_date := r.Form.Get("end_date")
+
+	// 2021-08-23 (reservation format) | 01/02 03:04:05PM '06 -0700 (go reference time format)
+
+	layout := "2006-01-02"
+	startDate, err := time.Parse(layout, start_date)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	endDate, err := time.Parse(layout, end_date)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
 	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
+		StartDate: startDate,
+		EndDate:   endDate,
+		RoomID:    roomID,
 	}
 
 	form := forms.New(r.PostForm)
@@ -51,6 +80,26 @@ func (rh *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 			Form: form,
 			Data: data,
 		})
+	}
+
+	newReservationID, err := rh.DB.InsertReservation(reservation)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	restriction := models.RoomRestriction{
+		StartDate:     startDate,
+		EndDate:       endDate,
+		RoomID:        roomID,
+		ReservationID: newReservationID,
+		RestrictionID: 1,
+	}
+
+	err = rh.DB.InsertRoomRestriction(restriction)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
 	}
 
 	rh.App.Session.Put(r.Context(), "reservation", reservation)
