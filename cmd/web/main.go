@@ -10,6 +10,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/fakorede/gobnb/internal/config"
+	"github.com/fakorede/gobnb/internal/driver"
 	"github.com/fakorede/gobnb/internal/handlers"
 	"github.com/fakorede/gobnb/internal/helpers"
 	"github.com/fakorede/gobnb/internal/models"
@@ -24,10 +25,12 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer db.SQL.Close()
 
 	fmt.Println(fmt.Sprintf("Starting application on Port %s", portNumber))
 	// _ = http.ListenAndServe(portNumber, nil)
@@ -41,7 +44,7 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// values to be stored in session
 	gob.Register(models.Reservation{})
 
@@ -63,19 +66,27 @@ func run() error {
 
 	app.Session = session
 
+	// connect to database
+	log.Println("Connecting to database...")
+	db, err := driver.ConnectDB("host=localhost port=5432 dbname=gobnb user=postgres password=postgres")
+	if err != nil {
+		log.Fatal("Cannot connect to database")
+	}
+	log.Println("Connected to database...")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Cannot create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = app.InProduction
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }
