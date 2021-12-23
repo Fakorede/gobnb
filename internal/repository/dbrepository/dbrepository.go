@@ -7,6 +7,7 @@ import (
 	"github.com/fakorede/gobnb/internal/repository"
 )
 
+// define & init postgres repository
 type postgresRepo struct {
 	App *config.AppConfig
 	DB  *sql.DB
