@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 
@@ -62,30 +63,6 @@ func (rh *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// start_date := r.Form.Get("start_date")
-	// end_date := r.Form.Get("end_date")
-
-	// // 2021-08-23 (reservation format) | 01/02 03:04:05PM '06 -0700 (go reference time format)
-
-	// layout := "2006-01-02"
-	// startDate, err := time.Parse(layout, start_date)
-	// if err != nil {
-	// 	helpers.ServerError(w, err)
-	// 	return
-	// }
-
-	// endDate, err := time.Parse(layout, end_date)
-	// if err != nil {
-	// 	helpers.ServerError(w, err)
-	// 	return
-	// }
-
-	// roomID, err := strconv.Atoi(r.Form.Get("room_id"))
-	// if err != nil {
-	// 	helpers.ServerError(w, err)
-	// 	return
-	// }
-
 	reservation.FirstName = r.Form.Get("first_name")
 	reservation.LastName = r.Form.Get("last_name")
 	reservation.Email = r.Form.Get("email")
@@ -133,6 +110,7 @@ func (rh *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
+// ReservationSummary displays reservation summary page
 func (rh *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := rh.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
@@ -162,6 +140,7 @@ func (rh *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request)
 	})
 }
 
+// ChooseRoom displays list of available rooms
 func (rh *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
@@ -176,6 +155,46 @@ func (rh *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res.RoomID = roomID
+
+	rh.App.Session.Put(r.Context(), "reservation", res)
+
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
+}
+
+// BookRoom takes url params and builds sessional variables and takes user to make reservation page
+func (rh *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+	roomID, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	start_date := r.URL.Query().Get("s")
+	end_date := r.URL.Query().Get("e")
+
+
+	layout := "2006-01-02"
+
+	startDate, err := time.Parse(layout, start_date)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	endDate, err := time.Parse(layout, end_date)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	var res models.Reservation
+
+	room, err := rh.DB.GetRoomByID(roomID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.Room.RoomName = room.RoomName
+
+	res.RoomID = roomID
+	res.StartDate = startDate
+	res.EndDate = endDate
 
 	rh.App.Session.Put(r.Context(), "reservation", res)
 
